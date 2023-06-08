@@ -1,2 +1,5 @@
-general = 931712638742855732
 morning_hour = 6
+
+[[general_channels]]
+guild_id = 931712635819405342
+channel_id = 931712638742855732
