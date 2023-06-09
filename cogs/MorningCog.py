@@ -46,11 +46,11 @@ class MorningCog(BaseCog):
             title="Valorous morning!",
             description="\'Tis time to **riseth** and **grindeth!**",
             color=0xFFEF23) \
-            .set_image(url="https://images-ext-1.discordapp.net/external/12Md-q7qdrsMLTOuUuaIX-g1KgrQnfP4DFFGQNiycnA/https/media.tenor.com/vqKSSrOw4yYAAAAC/glitter-limbus-company.gif?width=448&height=448") \
+            .set_image(url="https://media.tenor.com/vqKSSrOw4yYAAAAC/glitter-limbus-company.gif") \
             .set_footer(text="Bot by .extro")
         
-        for guild in self.general_channels:
-            await self.general_channels[guild].send(embed=embed)
+        for _, channel in self.general_channels:
+            await channel.send(embed=embed)
 
 def setup(bot: commands.Bot) -> None:
     bot.add_cog(MorningCog(bot))

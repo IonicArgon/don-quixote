@@ -1,7 +1,6 @@
 import os
 import discord
 import logging
-import asyncio
 from dotenv import load_dotenv
 from discord.ext import commands
 
@@ -21,6 +20,7 @@ bot.remove_command('help')
 @bot.event
 async def on_ready() -> None:
     logging.info("Logged in as {0.user}".format(bot))
+    logging.info(f'{[guild.name for guild in bot.guilds]}')
     await bot.change_presence(activity=discord.Game(
         "LIMBUS COMPANYYY!!!"
     ))

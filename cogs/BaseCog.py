@@ -5,7 +5,7 @@ import discord
 from discord.ext import commands
 
 class BaseCog(commands.Cog):
-    def __init__(self, bot):
+    def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.config = toml.load("config.toml")
         self.general_channels = None
@@ -15,12 +15,12 @@ class BaseCog(commands.Cog):
         logging.info("BaseCog initialized")
 
     async def find_general_channels(self) \
-    -> dict[typing.Optional[discord.TextChannel]]:
+    -> list[tuple[discord.Guild, typing.Optional[discord.TextChannel]]]:
         logging.info("Looking for general channels")
-        return_dict = {}
+        return_list = []
 
-        async for guild in self.bot.fetch_guilds():
-            channels_raw = await guild.fetch_channels()
+        for guild in self.bot.guilds:
+            channels_raw = guild.channels
             def filter_(channel):
                 if type(channel) == discord.TextChannel:
                     return channel
@@ -47,9 +47,9 @@ class BaseCog(commands.Cog):
                 logging.info("No configured channel found for guild, defaulting to first channel")
                 channel = channels[0]
 
-            return_dict[guild] = channel
+            return_list.append((guild, channel))
 
-        return return_dict
+        return return_list
 
     async def guild_members_generator(self, guild: discord.Guild) \
     -> typing.AsyncGenerator[discord.Member, None]:
