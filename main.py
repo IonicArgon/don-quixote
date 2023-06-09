@@ -1,18 +1,20 @@
 import os
 import discord
 import logging
+import asyncio
 from dotenv import load_dotenv
 from discord.ext import commands
 
 load_dotenv()
 TOKEN = os.getenv("TOKEN")
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(message)s")
 
-intents = discord.Intents.all()
 bot = commands.Bot(
     command_prefix=commands.when_mentioned_or("!don"), 
-    intents=intents,
+    intents=discord.Intents.all(),
     description="LIMBUS COMPANYYY!!!")
 bot.remove_command('help')
 
@@ -23,12 +25,11 @@ async def on_ready() -> None:
         "LIMBUS COMPANYYY!!!"
     ))
 
-@bot.event
-async def setup_hook() -> None:
-    await bot.load_extension("cogs.MorningCog")
-
 if __name__ == "__main__":
-    if TOKEN is not None:
-        bot.run(TOKEN)
-    else:
-        logging.error("No token found")
+    if TOKEN is None:
+        logging.error("TOKEN is None")
+        exit(1)
+
+    bot.load_extension("cogs.MorningCog")
+    bot.load_extension("cogs.LimbusCog")
+    bot.run(TOKEN)

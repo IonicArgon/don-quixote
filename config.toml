@@ -1,4 +1,10 @@
-morning_hour = 6
+morning_hour = 22
+
+[greetings]
+morning = "Yaaawn… You must be one diligent laborer, Manager Esquire. How on earth do you manage to rouse yourself at this hour…?"
+afternoon = "What plans doth you have for a luncheon today? I, for one, eagerly anticipate Señorita Rodya’s choice of “fancy diner”."
+evening = "The stars shine bright tonight. Doth you see them as well, Manager Esquire?"
+night = "Manager Esquire!!!!! To where in the world hast thou disappeared!!!!!!!!!!!"
 
 [[general_channels]]
 guild_id = 931712635819405342

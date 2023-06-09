@@ -1,6 +1,5 @@
 import toml
 import logging
-import asyncio
 import typing
 import discord
 from discord.ext import commands
@@ -12,11 +11,13 @@ class BaseCog(commands.Cog):
         self.general_channels = None
 
     async def base_on_ready(self) -> None:
-        self.general_channels = self.find_general_channel()
+        self.general_channels = await self.find_general_channels()
+        logging.info("BaseCog initialized")
 
-    async def find_general_channel(self) \
-    -> typing.Optional[discord.TextChannel]:
+    async def find_general_channels(self) \
+    -> dict[typing.Optional[discord.TextChannel]]:
         logging.info("Looking for general channels")
+        return_dict = {}
 
         async for guild in self.bot.fetch_guilds():
             channels_raw = await guild.fetch_channels()
@@ -46,4 +47,16 @@ class BaseCog(commands.Cog):
                 logging.info("No configured channel found for guild, defaulting to first channel")
                 channel = channels[0]
 
-            yield channel
+            return_dict[guild] = channel
+
+        return return_dict
+
+    async def guild_members_generator(self, guild: discord.Guild) \
+    -> typing.AsyncGenerator[discord.Member, None]:
+        logging.info("Looking for guild members")
+
+        async for member in guild.fetch_members():
+            yield member
+
+def setup(bot: commands.Bot) -> None:
+    bot.add_cog(BaseCog(bot))
