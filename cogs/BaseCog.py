@@ -2,7 +2,7 @@ import toml
 import logging
 import typing
 import discord
-from discord.ext import commands
+from discord.ext import commands, tasks
 
 class BaseCog(commands.Cog):
     def __init__(self, bot: commands.Bot):
@@ -14,7 +14,14 @@ class BaseCog(commands.Cog):
 
     async def base_on_ready(self) -> None:
         self.general_channels = await self.find_general_channels()
+        self.updating_loop.start()
         logging.debug("BaseCog initialized")
+
+    @tasks.loop(hours=6)
+    async def updating_loop(self) -> None:
+        await self.bot.wait_until_ready()
+        logging.info("Updating general channels")
+        self.general_channels = await self.find_general_channels()
 
     async def find_general_channels(self) \
     -> list[tuple[discord.Guild, discord.TextChannel, discord.VoiceChannel]]:
