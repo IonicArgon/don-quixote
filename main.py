@@ -20,7 +20,6 @@ bot.remove_command('help')
 @bot.event
 async def on_ready() -> None:
     logging.info("Logged in as {0.user}".format(bot))
-    logging.info(f'{[guild.name for guild in bot.guilds]}')
     await bot.change_presence(activity=discord.Game(
         "LIMBUS COMPANYYY!!!"
     ))
@@ -32,4 +31,5 @@ if __name__ == "__main__":
 
     bot.load_extension("cogs.MorningCog")
     bot.load_extension("cogs.LimbusCog")
+    bot.load_extension("cogs.VoiceCog")
     bot.run(TOKEN)

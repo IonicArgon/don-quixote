@@ -16,32 +16,32 @@ class MorningCog(BaseCog):
         await self.base_on_ready()
         self.morning_announcement.start()
         self.reset_annoucements.start()
-        logging.info("MorningCog initialized")
+        logging.debug("MorningCog initialized")
 
-    @tasks.loop(seconds=5)
+    @tasks.loop(seconds=1)
     async def reset_annoucements(self) -> None:
         await self.bot.wait_until_ready()
         if self.announced_morning and self.current_hour != self.morning_hour:
             self.announced_morning = False
-            logging.info("Reset morning announcement")
+            logging.debug("Reset morning announcement")
     
-    @tasks.loop(seconds=5)
+    @tasks.loop(seconds=1)
     async def morning_announcement(self) -> None:
         await self.bot.wait_until_ready()
         self.current_hour = time.localtime().tm_hour
 
         if not self.general_channels:
-            logging.info("General channels not ready")
+            logging.debug("General channels not ready")
             return
 
         if not self.announced_morning:
             if self.current_hour == self.morning_hour:
-                logging.info("Morning time")
+                logging.debug("Morning time")
                 self.announced_morning = True
                 await self.announce_morning()
 
     async def announce_morning(self) -> None:
-        logging.info("Announcing morning")
+        logging.debug("Announcing morning")
         embed = discord.Embed(
             title="Valorous morning!",
             description="\'Tis time to **riseth** and **grindeth!**",
@@ -49,7 +49,7 @@ class MorningCog(BaseCog):
             .set_image(url="https://media.tenor.com/vqKSSrOw4yYAAAAC/glitter-limbus-company.gif") \
             .set_footer(text="Bot by .extro")
         
-        for _, channel in self.general_channels:
+        for _, channel, _ in self.general_channels:
             await channel.send(embed=embed)
 
 def setup(bot: commands.Bot) -> None:
