@@ -17,7 +17,7 @@ class BaseCog(commands.Cog):
         logging.debug("BaseCog initialized")
 
     async def find_general_channels(self) \
-    -> list[tuple[discord.Guild, typing.Optional[discord.TextChannel], typing.Optional[discord.VoiceChannel]]]:
+    -> list[tuple[discord.Guild, discord.TextChannel, discord.VoiceChannel]]:
         logging.debug("Looking for general channels")
         return_list = []
 

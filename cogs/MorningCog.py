@@ -49,6 +49,10 @@ class MorningCog(BaseCog):
             .set_image(url="https://media.tenor.com/vqKSSrOw4yYAAAAC/glitter-limbus-company.gif") \
             .set_footer(text="Bot by .extro")
         
+        if self.general_channels is None:
+            logging.debug("General channels not ready")
+            return
+        
         for _, channel, _ in self.general_channels:
             await channel.send(embed=embed)
 

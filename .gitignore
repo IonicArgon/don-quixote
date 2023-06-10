@@ -1,3 +1,4 @@
 .env
 lib
 Scripts
+__pycache__/

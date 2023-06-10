@@ -2,8 +2,10 @@ import discord
 import logging
 import datetime
 import pytz
+from typing import cast
 from astral.geocoder import database, lookup
 from astral.sun import sun
+from astral import LocationInfo
 from enum import Enum
 from discord.ext import commands, tasks
 from cogs.BaseCog import BaseCog
@@ -17,7 +19,7 @@ class TimeOfDay(Enum):
 class LimbusCog(BaseCog):
     def __init__(self, bot):
         super().__init__(bot)
-        self.location = lookup("New York", database())
+        self.location = cast(LocationInfo, lookup("New York", database()))
 
     @commands.Cog.listener()
     async def on_ready(self) -> None:
@@ -30,6 +32,10 @@ class LimbusCog(BaseCog):
         await self.bot.wait_until_ready()
 
         logging.debug("Checking for manager esquires")
+
+        if self.general_channels is None:
+            logging.debug("General channels are not ready")
+            return
         
         time_of_day = await self.get_time_of_day()
         description = None
